@@ -2,7 +2,7 @@ package converter;
 
 import java.util.ArrayList;
 
-//TODO reverse Arraylist
+//TODO fix printElements()
 public class Converter {
     private int decimalValue;
     private float octalBase = 8f;
@@ -29,7 +29,7 @@ public class Converter {
         for (Integer integer : list) {
             System.out.print(integer);
         }
-        return "";
+        return ""; //correct this for program to return value in GUI
     }
 
 
@@ -62,5 +62,6 @@ public class Converter {
             }
         }
         return printElements(reverseArrayList(octalValues));
+
     }
 }
