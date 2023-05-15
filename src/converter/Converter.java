@@ -1,28 +1,13 @@
 package converter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-//TODO fix convertDecimal logic
 public class Converter {
     private int decimalValue;
-    private float octalBase = 8f;
 
     public Converter(int decimalValue) {
         this.decimalValue = decimalValue;
-    }
-
-    public static float fractionOf(float x) {
-        return x - (int) x;
-    }
-
-    public ArrayList<Integer> reverseArrayList(ArrayList<Integer> list) {
-        for (int i = 0; i < list.size() / 2; i++) {
-            Integer temp = list.get(i);
-            list.set(i, list.get(list.size() - i - 1));
-            list.set(list.size() - i - 1, temp);
-        }
-
-        return list;
     }
 
     public String printElements(ArrayList<Integer> list) {
@@ -38,33 +23,38 @@ public class Converter {
     public String convertDecimal() {
         ArrayList<Integer> octalValues = new ArrayList<>();
 
-        if (decimalValue > 0) {
-            do {
-                float octalNumber = decimalValue / octalBase;
-                float remainder = fractionOf(octalNumber);
-                Integer convertedOctalValue = Math.round(remainder * 8);
-                octalValues.add(convertedOctalValue);
-                decimalValue = (int) octalNumber;
-            } while (decimalValue > 0);
+        int decimal = decimalValue;
+        int sign = 1;
 
-        } else {
-            do {
-                float octalNumber = decimalValue / octalBase;
-                float remainder = fractionOf(octalNumber);
-                Integer convertedOctalValue = Math.round(remainder * 8);
-                octalValues.add(convertedOctalValue);
-                decimalValue = (int) octalNumber;
-            } while (decimalValue < 0);
+        // If decimalValue is negative, changes decimal to its absolute value and sets sign to -1.
 
-            for (int i = 0; i < octalValues.size() - 1; ++i) {
-                if (octalValues.get(i) < 0) {
-                    int absoluteValue = Math.abs(octalValues.get(i));
-                    octalValues.set(i, absoluteValue);
-                }
+        if (decimalValue < 0) {
+            decimal = -decimalValue;
+            sign = -1;
+        }
+
+        // calculates the remainder of decimal divided by 8. This remainder represents the rightmost octal digit.
+        while (decimal > 0) {
+            int remainder = decimal % 8;
+            octalValues.add(remainder * sign);
+            decimal = decimal / 8;
+        }
+
+        //If list is empty, it means the input decimal value was 0, so it adds a single 0 to the list.
+        if (octalValues.isEmpty()) {
+            octalValues.add(0);
+        }
+
+        //Checks each element in the octalValues list and ensures that all negative values are converted to their absolute values, except for the last one.
+        for (int i = 0; i < octalValues.size() - 1; ++i) {
+            if (octalValues.get(i) < 0) {
+                int absoluteValue = Math.abs(octalValues.get(i));
+                octalValues.set(i, absoluteValue);
             }
         }
 
-        return printElements(reverseArrayList(octalValues));
+        Collections.reverse(octalValues);
+        return printElements(octalValues);
     }
 
 }
